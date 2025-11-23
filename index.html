@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSP Lab Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; }
+        
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        
+        .login-box h2 { text-align: center; margin-bottom: 30px; color: #333; }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .login-btn:hover { background: #5a6fd8; }
+        
+        .error { color: red; text-align: center; margin-top: 10px; }
+        
+        .main-container {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .sections-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .section-btn {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .section-btn:hover { background: #e9ecef; border-color: #667eea; }
+        .section-btn.active { background: #667eea; color: white; }
+        
+        .section-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            line-height: 1.6;
+        }
+        
+        .section-content.active { display: block; }
+        
+        .section-content h3 { color: #667eea; margin-bottom: 20px; }
+        .section-content h4 { color: #333; margin: 20px 0 10px 0; }
+        .section-content pre { background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .section-content code { background: #f8f9fa; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div id="loginContainer" class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <div id="errorMsg" class="error"></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="mainContainer" class="main-container">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        
+        <div class="header">
+            <h1>DSP Laboratory Portal</h1>
+            <p>Digital Signal Processing Experiments</p>
+        </div>
+
+        <div class="sections-nav">
+            <div class="section-btn active" onclick="showSection(1)">Section 1: Waveform Generation</div>
+            <div class="section-btn" onclick="showSection(2)">Section 2: Linear & Circular Convolution</div>
+            <div class="section-btn" onclick="showSection(3)">Section 3: FFT and IFFT Using DIT and DIF</div>
+            <div class="section-btn" onclick="showSection(4)">Section 4: Discrete Fourier Transform Pair</div>
+            <div class="section-btn" onclick="showSection(5)">Section 5: Design of FIR Filter Using Windowing Technique</div>
+            <div class="section-btn" onclick="showSection(6)">Section 6: Design of IIR Filter Using Impulse Invariance and Bilinear Transformation Technique</div>
+            <div class="section-btn" onclick="showSection(7)">Section 7: Quantization Effects in Digital Filter Design</div>
+            <div class="section-btn" onclick="showSection(8)">Section 8: EEG</div>
+            <div class="section-btn" onclick="showSection(9)">Section 9: ECG</div>
+            <div class="section-btn" onclick="showSection(10)">Section 10</div>
+        </div>
+
+        <div id="section1" class="section-content active">
+            <h3>1. Objective:</h3>
+            <p>To generate sine, cosine, sawtooth, square, exponential, impulse, ramp, step waveforms in continuous and discrete forms using MATLAB.</p>
+
+            <h3>2. System and software tools required:</h3>
+            <p>DELL 18.5'' OPTIPLEX-380<br>MATLAB 7.1</p>
+
+            <h3>3. Pre Lab work:</h3>
+            <h4>3.1 Theory</h4>
+            <p>The sine wave or sinusoid is a mathematical curve that describes a smooth repetitive oscillation representing an AC signal whose function is given by, <code>y(t) = A sin(ωt + φ)</code></p>
+            
+            <p><strong>Where:</strong><br>
+            A – Amplitude in Volts<br>
+            ω = 2πf – Angular Frequency in Hertz<br>
+            f – Frequency in Hertz<br>
+            t – Time Period in Seconds<br>
+            φ – Phase Angle in degrees</p>
+
+            <p>A cosine wave is a signal waveform with a shape identical to that of a sine wave, except each point on the cosine wave occurs exactly 1/4 cycle earlier than the corresponding point on the sine wave. A cosine wave and its corresponding sine wave have the same frequency, but the cosine wave leads the sine wave by 90 degrees of phase whose function is given by:</p>
+            <code>cos(x) = sin(x + π/2)</code>
+
+            <p>Sawtooth Waveforms are another type of periodic waveform whose shape resembles the teeth of a saw blade. The sawtooth wave contains a fundamental and both odd and even harmonics. Square-wave Waveforms are used extensively in electronic and microelectronic circuits for clock and timing control signals as they are symmetrical waveforms of equal and square duration representing each half of a cycle and nearly all digital logic circuits use square wave waveforms on their input and output gates.</p>
+
+            <p>Exponential waveform is a non-repetitive waveform that rises or falls exponentially from some initial value at some initial time whose function is given by, <code>y(t) = e^(at)</code></p>
+            
+            <p><strong>Where:</strong><br>
+            a > 0, the waveform rises without bound<br>
+            a < 0, the waveform decays to zero.</p>
+
+            <p>An impulse voltage is a uni-directional voltage that rises from zero to a maximum value in a very short time and dies away more or less to zero in a comparatively greater time. A ramp function is a function of voltage that increases or decreases linearly with time. The slope of the ramp function is always constant. A Step function makes an instantaneous jump from one steady value to another steady value. A step means an instantaneous change in level.</p>
+
+            <h4>3.2 Algorithm</h4>
+            <ol>
+                <li>Assign t and n values for the waveform generation.</li>
+                <li>Write the expression for the required waveform.</li>
+                <li>Choose the number of rows and columns to plot all the waveforms.</li>
+                <li>Generate the above said waveforms in continuous form using inbuilt functions.</li>
+                <li>Repeat the step 4 for generating the same waveforms in discrete form.</li>
+                <li>Plot all the graphs</li>
+            </ol>
+
+            <h3>4. In Lab work:</h3>
+            <h4>4.1 Sample coding/debugging</h4>
+            <pre><code>sin(2*pi*f*t)
+cos(2*pi*f*t)
+square(2*pi*f*t)
+sawtooth(2*pi*f*t)
+exp(0.25*t)
+ones(1,11)</code></pre>
+
+            <h4>4.2 Test Cases</h4>
+            <pre><code>xlabel(AX,...)
+ylabel(AX,...)
+title('text')</code></pre>
+
+            <h4>4.3 Program</h4>
+            <pre><code>%Continuous waveforms
+%sine waveform generation
+clc;
+clear all;
+t=0:0.1:3;
+x=sin(2*pi*1*t);
+subplot(3,3,1);
+plot(t,x,'--rs');
+title('sin waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%cosine waveform generation
+y=cos(2*pi*1*t);
+subplot(3,3,2);
+plot(t,y,'--rs');
+title('cos waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%sawtooth waveform generation
+t=0:0.1:3;
+z=sawtooth(2*pi*1*t);
+subplot(1,1,1);
+plot(t,z,'--rs');
+title('sawtooth waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%square waveform generation
+t=0:0.1:5;
+w=square(2*pi*1*t);
+subplot(1,1,1);
+plot(t,w,'--rs');
+title('square waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%exp +ve waveform generation
+t=0:0.5:10;
+c=exp(0.25*t); // formula
+subplot(1,1,1);
+plot(t,c,'--rs');
+title('exponential growing waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%exp -ve waveform generation
+t=0:0.5:10;
+d=exp(-0.25*t);
+subplot(1,1,1);
+plot(t,d,'--rs');
+title('exponential decaying waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%unit step waveform generation
+t=0:1:10;
+e=ones(1,11); // formula 1 row , 11 columns
+subplot(1,1,1);
+plot(t,e,'--rs');
+title('unit step waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%ramp waveform
+t=0:1:10;
+f=t; // formula
+subplot(1,1,1);
+plot(t,f,'--rs');
+title('ramp waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%impulse waveform
+t= -5 to 1 => zeros , t=1to 5 => zeros; t=0 => ones (1,1)
+t=-5:1:5;
+m=[zeros(1,5) ones(1,1) zeros(1,5)];
+subplot(1,1,1);
+plot(t,m,'--rs');
+title('impulse waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%discrete waveforms
+%sine waveform generation
+clc;
+clear all;
+t=0:0.1:2;
+x=sin(2*pi*1*t);
+subplot(3,3,1);
+stem(t,x,'--gs');
+title('sin waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%cosine waveform generation
+y=cos(2*pi*1*t);
+subplot(3,3,2);
+stem(t,y,'--bs');
+title('cos waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%sawtooth waveform generation
+z=sawtooth(2*pi*1*t);
+subplot(3,3,3);
+stem(t,z,'--rs');
+title('sawtooth waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%square waveform generation
+t=0:0.1:2;
+w=square(2*pi*1*t);
+subplot(3,3,4);
+stem(t,w,'--rs');
+title('square waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%growing exp waveform generation
+t=0:0.5:10;
+c=exp(0.25*t);
+subplot(3,3,5);
+stem(t,c,'--rs');
+title('exponential waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%decaying exp waveform generation
+d=exp(-0.25*t);
+subplot(3,3,6);
+stem(t,d,'--rs');
+title('exponential waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%unit step waveform generation
+t=0:1:10;
+s=ones(1,11);
+subplot(3,3,7);
+stem(t,s,'--rs');
+title('unit step waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%ramp waveform
+f=t;
+subplot(3,3,8);
+stem(t,f,'--rs');
+title('ramp waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%impulse waveform
+t=-5:1:5;
+m=[zeros(1,5) ones(1,1) zeros(1,5)];
+subplot(3,3,9);
+stem(t,m,'--rs');
+title('impulse waveform');
+xlabel('time in millisec');
+ylabel('amplitude in volts');</code></pre>
+        </div>
+
+        <div id="section2" class="section-content">
+            <h3>LINEAR CONVOLUTION AND CIRCULAR CONVOLUTION</h3>
+            
+            <h4>4.3 Program</h4>
+            <pre><code>%using in-built function
+clc;
+clearall;
+xn=[1 2 3 1];
+hn=[1 1 1 1];
+yn=cconv(xn,hn,4);
+disp(yn);
+subplot(3,1,1);
+stem(xn);
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+subplot(3,1,2);
+stem(hn);
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+subplot(3,1,3);
+stem(yn);
+title('circular convolution');
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+
+%using DFT pair
+clc;
+clear all;
+xn= [1 2 3 1]; // xn=input('Enter the sequence x(n):');
+hn= [1 1 1 1]; // hn=input('Enter the sequence h(n):');
+L=length(xn);
+M=length(hn);
+N=max(L,M);
+xn=[xn zeros(1,N-L)];
+hn=[hn zeros(1,N-M)];
+for K = 0:N-1
+    for n = 0:N-1
+        p = exp(-1j*2*pi*n*K/N);
+        a(K+1,n+1) = p;
+    end
+end
+XK=xn*a;
+for K = 0:N-1
+    for n = 0:N-1
+        p = exp(-1j*2*pi*n*K/N);
+        a(K+1,n+1) = p;
+    end
+end
+HK=hn*a;
+YK=XK.*HK;
+for n = 0:N-1
+    for K = 0:N-1
+        p = exp(1j*2*pi*n*K/N);
+        a(n+1,k+1) = p;
+    end
+end
+yn1=(YK*a)/N;
+disp('circular convolution using DFT:');
+disp(yn1);
+
+%using FFT pair
+XK=fft(xn,N);
+HK=fft(hn,N);
+YK=XK.*HK;
+yn2=ifft(YK,N);
+disp(yn2);
+
+%using matrix multiplication
+xn1=[ ];
+xn=xn';
+hn=hn';
+for i=1:N
+    xn1(:,i)=circshift(xn,i-1);
+end
+yn3=xn1*hn;
+yn3=yn3';
+disp(yn3);
+subplot(3,1,1);
+stem(xn);
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+subplot(3,1,2);
+stem(hn);
+xlabel('time in millisec');
+ylabel('amplitude in volts');
+subplot(3,1,3);
+stem(yn3);
+title('circular convolution');
+xlabel('time in millisec');
+ylabel('amplitude in volts');</code></pre>
+
+            <h4>4.4 Execution of the program</h4>
+            <p><strong>Output:</strong></p>
+            <pre><code>Enter the sequence x(n):[1 -1 -2 3 1]
+Enter the sequence h(n):[1 1 1]
+circular convolution using DFT:
+5.0000 + 0.0000i 1.0000 - 0.0000i -2.0000 - 0.0000i -0.0000 + 0.0000i 2.0000 + 0.0000i
+circular convolution using FFT:
+5.0000 1.0000 -2.0000 0.0000 2.0000</code></pre>
+        </div>
+
+        <div id="section3" class="section-content">
+            <h3>FFT and IFFT Using DIT and DIF Algorithm</h3>
+            
+            <h4>4.3 Program</h4>
+            
+            <h4>DIT-FFT</h4>
+            <pre><code>% Fast fourier transform - DIT using in-built function
+clc;
+clear all;
+x=input('Enter the input sequence:');
+N=length(x);
+y=fft(x,N);
+disp('FFT-DIT o/p using in-built fn:');
+disp(y);
+
+% FFT-DIT using algorithm
+y=bitrevorder(x);
+w1=1;
+w2=0.707-0.707j;
+w3=-1j;
+w4=-0.707-0.707j;
+
+%calculation of stage 1
+for K=1:2:N
+    s1(K)=y(K)+y(K+1);
+    s1(K+1)=y(K)-y(K+1);
+end
+disp('o/p of 1st stage');
+disp(s1);
+
+%calculation of stage 2
+for K=1:4:N
+    s2(K)=s1(K)+s1(K+2);
+    s2(K+1)=s1(K+1)+w3*s1(K+3);
+    s2(K+2)=s1(K)-s1(K+2);
+    s2(K+3)=s1(K+1)-w3*s1(K+3);
+end
+disp('o/p of 2nd stage');
+disp(s2);
+
+%calculation of stage 3
+for K=1:8:N
+    s3(K)=s2(K)+s2(K+4);
+    s3(K+1)=s2(K+1)+w2*s2(K+5);
+    s3(K+2)=s2(K+2)+w3*s2(K+6);
+    s3(K+3)=s2(K+3)+w4*s2(K+7);
+    s3(K+4)=s2(K)-s2(K+4);
+    s3(K+5)=s2(K+1)-w2*s2(K+5);
+    s3(K+6)=s2(K+2)-w3*s2(K+6);
+    s3(K+7)=s2(K+3)-w4*s2(K+7);
+end
+disp('o/p of 3rd stage :');
+disp(s3);
+
+%magnitude and phase plot
+disp('magnitude and phase response of FFT-DIT sequence:');
+subplot(2,1,1);
+stem(20*log10(abs(s3)));
+title('Magnitude plot');
+xlabel('sample(n)');
+ylabel('magnitude');
+subplot(2,1,2);
+stem(angle(s3));
+title('phase plot');
+xlabel('sample(n)');
+ylabel('phase');</code></pre>
+
+            <h4>DIF-FFT</h4>
+            <pre><code>% Fast fourier transform - DIF using in-built
+clc;
+clear all;
+y=input('Enter the input sequence:');
+N=length(y);
+x=fft(y,N);
+disp('calculation of FFT-DIF');
+disp('FFT-DIF o/p using in-built fn:');
+disp(x);
+
+% Fast fourier transform - DIF using algorithm
+w1=1;
+w2=0.707-0.707j;
+w3=-1j;
+w4=-0.707-0.707j;
+
+%calculation of stage 1
+for K=1:8:N
+    s1(K)=y(K)+y(K+4);
+    s1(K+1)=y(K+1)+y(K+5);
+    s1(K+2)=y(K+2)+y(K+6);
+    s1(K+3)=y(K+3)+y(K+7);
+    s1(K+4)=(y(K)-y(K+4))*w1;
+    s1(K+5)=(y(K+1)-y(K+5))*w2;
+    s1(K+6)=(y(K+2)-y(K+6))*w3;
+    s1(K+7)=(y(K+3)-y(K+7))*w4;
+end
+disp('FFT-DIF o/p using algorithm:');
+disp('o/p of 1st stage :');
+disp(s1);
+
+%calculation of stage 2
+for K=1:4:N
+    s2(K)=s1(K)+s1(K+2);
+    s2(K+1)=s1(K+1)+s1(K+3);
+    s2(K+2)=(s1(K)-s1(K+2))*w1;
+    s2(K+3)=(s1(K+1)-s1(K+3))*w3;
+end
+disp('o/p of 2nd stage :');
+disp(s2);
+
+%calculation of stage 3
+for K=1:2:N
+    s3(K)=s2(K)+s2(K+1);
+    s3(K+1)=s2(K)-s2(K+1);
+end
+x=bitrevorder(s3);
+disp('o/p of 3rd stage :');
+disp(x);
+
+%magnitude and phase plot
+disp('magnitude and phase response of FFT-DIF sequence:');
+subplot(2,1,1);
+stem(20*log10(abs(x)));
+title('Magnitude plot');
+xlabel('sample(n)');
+ylabel('magnitude');
+subplot(2,1,2);
+stem(angle(x));
+title('phase plot');
+xlabel('sample(n)');
+ylabel('phase');</code></pre>
+
+            <h4>4.4 Execution of the program</h4>
+            <pre><code>Enter the input sequence:[ 1 3 5 7 7 5 3 1]
+FFT-DIT o/p using in-built fn:
+Columns 1 through 6
+32.0000 -11.6569 - 4.8284i 0 -0.3431 - 0.8284i 0 -0.3431 + 0.8284i
+Columns 7 through 8
+0 -11.6569 + 4.8284i
+
+o/p of 1st stage
+8 -6 8 2 8 -2 8 6
+
+o/p of 2nd stage
+Columns 1 through 6
+16.0000 -6.0000 - 2.0000i 0 -6.0000 + 2.0000i 16.0000 -2.0000 - 6.0000i
+Columns 7 through 8
+0 -2.0000 + 6.0000i
+
+o/p of 3rd stage
+Columns 1 through 6
+32.0000 -11.6560 - 4.8280i 0 -0.3440 - 0.8280i 0 -0.3440 + 0.8280i
+Columns 7 through 8
+0 -11.6560 + 4.8280i</code></pre>
+        </div>
+
+        <div id="section4" class="section-content">
+            <h3>DISCRETE FOURIER TRANSFORM PAIR</h3>
+            
+            <h4>4.3 Programs</h4>
+            
+            <h4>DFT (Discrete Fourier Transform)</h4>
+            <pre><code>%DFT
+clc;
+clear all;
+xn= [1 2 1 2] ; //xn= input('Enter the input sequence xn=');
+N=length(xn);
+for K = 0:N-1
+    for n = 0:N-1
+        p = exp(-1j*2*pi*n*K/N);
+        a(K+1,n+1) = p;
+    end
+end
+XK=xn*a;
+disp('dft output:');
+disp(XK);
+%magnitude and phase plot
+disp('magnitude and phase response of DFT sequence:');
+subplot(2,1,1);
+stem(abs(XK));
+title('Magnitude plot');
+xlabel('sample(n)');
+ylabel('magnitude');
+subplot(2,1,2);
+stem(angle(XK));
+title('phase plot');
+xlabel('sample(n)');
+ylabel('phase');</code></pre>
+            
+            <h4>IDFT (Inverse Discrete Fourier Transform)</h4>
+            <pre><code>%IDFT
+M=length(XK);
+for n = 0:M-1
+    for K = 0:M-1
+        p = exp(1j*2*pi*n*K/M);
+        a(n+1,K+1) = p;
+    end
+end
+xn=(XK*a)/M; 
+disp('idft output:')
+disp(xn);</code></pre>
+        </div>
+
+        <div id="section5" class="section-content">
+            <h3>DESIGN OF FIR FILTER USING WINDOWING TECHNIQUE</h3>
+            
+            <h4>4.3 Program</h4>
+            
+            <h4>FIR LOW PASS FILTER DESIGN</h4>
+            <pre><code>%FIR LOW PASS FILTER DESIGN
+clc;
+clear all;
+disp('FIR LOW PASS FILTER DESIGN');
+N=input('enter the order of the filter:');
+wc=input('enter the cut-off frequency:');
+n=0:1:N-1;
+M=(N-1)/2;
+disp('desired filter coefficient:');
+for n=0:N-1
+    if(n==M)
+        hd(n+1)=(wc/pi);
+    else
+        hd(n+1)=sin(wc*(n-M))./(pi*(n-M));
+    end
+end
+disp(hd);
+disp('rectangular window sequence:');
+n=0:N-1;
+w1(n+1)=1;
+disp(w1);
+disp('Filter coefficient 1:');
+for n=0:N-1
+    h1(n+1)=hd(n+1).*w1(n+1);
+end
+disp(h1);
+disp('hanning window sequence:');
+n=0:N-1;
+w2(n+1)=0.5-0.5*cos(2*n*pi/(N-1));
+disp(w2);
+disp('Filter coefficient 2:');
+for n=0:N-1
+    h2(n+1)=hd(n+1).*w2(n+1);
+end
+disp(h2);
+w=0:0.01:pi;
+H1=freqz(h1,1,w);
+plot(w/pi,abs(H1),':');
+hold on;
+H2=freqz(h2,1,w);
+plot(w/pi,abs(H2));
+grid on;
+title('magnitude plot');
+xlabel('normalized frequency in rad/sec');
+ylabel('magnitude in db');
+hold off;</code></pre>
+            
+            <h4>FIR HIGH PASS FILTER DESIGN</h4>
+            <pre><code>%FIR HIGH PASS FILTER DESIGN
+clc;
+clear all;
+disp('FIR HIGH PASS FILTER DESIGN');
+N=input('enter the order of the filter:');
+wc=input('enter the cut-off frequency:');
+n=0:1:N-1;
+M=(N-1)/2;
+disp('desired filter coefficient:');
+for n=0:N-1
+    if(n==M)
+        hd(n+1)=1-(wc/pi);
+    else
+        hd(n+1)=sin(pi*(n-M))-sin(wc*(n-M))/(pi*(n-M));
+    end
+end
+disp(hd);
+disp('rectangular window sequence:');
+n=0:N-1;
+w1(n+1)=1;
+disp(w1);
+disp('Filter coefficient 1:');
+for n=0:N-1
+    h1(n+1)=hd(n+1).*w1(n+1);
+end
+disp(h1);
+disp('hamming window sequence:');
+n=0:N-1;
+w2(n+1)=0.54-0.46*cos(2*n*pi/(N-1));
+disp(w2);
+disp('Filter coefficient 2:');
+for n=0:N-1
+    h2(n+1)=hd(n+1).*w2(n+1);
+end
+disp(h2);
+w=0:0.01:pi;
+H1=freqz(h1,1,w);
+plot(w/pi,abs(H1),':');
+hold on;
+H2=freqz(h2,1,w);
+plot(w/pi,abs(H2));
+grid on;
+title('magnitude plot');
+xlabel('normalized frequency in rad/sec');
+ylabel('magnitude in db');
+hold off;</code></pre>
+            
+            <h4>FIR BAND PASS FILTER DESIGN</h4>
+            <pre><code>%FIR BAND PASS FILTER DESIGN
+clc;
+clear all;
+disp('FIR BAND PASS FILTER DESIGN');
+N=input('enter the order of the filter:');
+wc1=input('enter the cut-off frequency 1:');
+wc2=input('enter the cut-off frequency 2:');
+n=0:1:N-1;
+M=(N-1)/2;
+disp('desired filter coefficient:');
+for n=0:N-1
+    if(n==M)
+        hd(n+1)=(wc2-wc1)/pi;
+    else
+        hd(n+1)=(sin(wc2*(n-M))-sin(wc1*(n-M)))./(pi*(n-M));
+    end
+end
+disp(hd);
+disp('rectangular window sequence:');
+n=0:N-1;
+w1(n+1)=1;
+disp(w1);
+disp('Filter coefficient 1:');
+for n=0:N-1
+    h1(n+1)=hd(n+1).*w1(n+1);
+end
+disp(h1);
+disp('hamming window sequence:');
+n=0:N-1;
+w2(n+1)=0.54-0.46*cos(2*n*pi/(N-1));
+disp(w2);
+disp('Filter coefficient 2:');
+for n=0:N-1
+    h2(n+1)=hd(n+1).*w2(n+1);
+end
+disp(h2);
+w=0:0.01:pi;
+H1=freqz(h1,1,w);
+plot(w/pi,abs(H1),':');
+hold on;
+H2=freqz(h2,1,w);
+plot(w/pi,abs(H2));
+grid on;
+title('magnitude plot');
+xlabel('normalized frequency in rad/sec');
+ylabel('magnitude in db');
+hold off;</code></pre>
+            
+            <h4>FIR BAND REJECT FILTER DESIGN</h4>
+            <pre><code>%FIR BAND REJECT FILTER DESIGN
+clc;
+clear all;
+disp('FIR BAND REJECT FILTER DESIGN');
+N=input('enter the order of the filter:');
+wc1=input('enter the cut-off frequency 1:');
+wc2=input('enter the cut-off frequency 2:');
+n=0:1:N-1;
+M=(N-1)/2;
+disp('desired filter coefficient:');
+for n=0:N-1
+    if(n==M)
+        hd(n+1)=1-(wc2-wc1)/pi;
+    else
+        hd(n+1)=(sin(wc1*(n-M))-sin(wc2*(n-M))+sin(pi*(n-M)))./(pi*(n-M));
+    end
+end
+disp(hd);
+disp('rectangular window sequence:');
+n=0:N-1;
+w1(n+1)=1;
+disp(w1);
+disp('Filter coefficient 1:');
+for n=0:N-1
+    h1(n+1)=hd(n+1).*w1(n+1);
+end
+disp(h1);
+disp('blackmann window sequence:');
+n=0:N-1;
+w2(n+1)=0.42-(0.5*cos(2*n*pi/(N-1)))+(0.08*cos(4*n*pi/(N-1)));
+disp(w2);
+disp('Filter coefficient 2:');
+for n=0:N-1
+    h2(n+1)=hd(n+1).*w2(n+1);
+end
+disp(h2);
+w=0:0.01:pi;
+H1=freqz(h1,1,w);
+plot(w/pi,abs(H1),':');
+hold on;
+H2=freqz(h2,1,w);
+plot(w/pi,abs(H2));
+grid on;
+title('magnitude plot');
+xlabel('normalized frequency in rad/sec');
+ylabel('magnitude in db');
+hold off;</code></pre>
+        </div>
+
+        <div id="section6" class="section-content">
+            <h3>DESIGN OF IIR FILTER USING IMPULSE INVARIANCE AND BILINEAR TRANSFORMATION TECHNIQUE</h3>
+            
+            <h4>Design of Digital Butterworth Filter</h4>
+            <pre><code>% design of digital Butterworth filter
+clc;
+clear all;
+disp('Design of Digital Butterworth Filter');
+disp('1.LowPass , 2.HighPass , 3.BandPass , 4.BandReject');
+f=input('Choose the required type of filter:');
+as=input('Enter the stop band attenuation');
+ap=input('Enter the pass band attenuation');
+ws=input('Enter the stop band frequency');
+wp=input('Enter the pass band frequency');
+[N wn]=buttord(wp,ws,ap,as);
+disp('Order of the Filter:');
+disp(N);
+switch f
+    case 1,
+        disp('Type1:Low pass filter');
+        [B A] = butter(N,wp,'low');
+    case 2,
+        disp('Type2:High pass filter');
+        [B A]=butter(N,wp,'high');
+    case 3,
+        disp('Type3:Band pass filter');
+        [B A]=butter(N,wp);
+    case 4,
+        disp('Type4:Band reject filter');
+        [B A]=butter(N,wp,'stop');
+end
+freqz(B,A);</code></pre>
+            
+            <h4>Design of Digital Chebyshev Filter</h4>
+            <pre><code>%design of digital chebyshev filter
+clc;
+clear all;
+disp('Design of Digital chebyshev Filter');
+disp('1.LowPass , 2.HighPass , 3.BandPass , 4.BandReject');
+f=input('choose the required type of filter:');
+as=input('Enter the stop band attenuation');
+ap=input('Enter the pass band attenuation');
+ws=input('Enter the stop band frequency');
+wp=input('Enter the pass band frequency');
+[N wn]=cheb1ord(wp,ws,ap,as);
+disp('Order of the Filter:');
+disp(N);
+R=0.5;
+switch f
+    case 1,
+        disp('Type1:Low pass filter');
+        [B A]=cheby1(N,R,wp,'low');
+    case 2,
+        disp('Type2:High pass filter');
+        [B A]=cheby1(N,R,wp,'high','s');
+    case 3,
+        disp('Type3:Band pass filter');
+        [B A]=cheby1(N,R,wp);
+    case 4,
+        disp('Type4:Band reject filter');
+        [B A]=cheby1(N,R,wp,'stop');
+end
+freqz(B,A);</code></pre>
+        </div>
+
+        <div id="section7" class="section-content">
+            <h3>QUANTIZATION EFFECTS IN DIGITAL FILTER DESIGN</h3>
+            
+            <h4>Quantization Error Analysis</h4>
+            <pre><code>q = quantizer([8 7]);
+r = realmax(q);
+u = r*(2*rand(50000,1) - 1); % Uniformly distributed (-1,1)
+xi=linspace(-2*eps(q),2*eps(q),256);
+q = quantizer('fix',[8 7]);
+err = quantize(q,u) - u;
+f_t = errpdf(q,xi);
+mu_t = errmean(q);
+v_t = errvar(q);
+% Theoretical variance = eps(q)^2 / 3
+% Theoretical mean = 0
+fidemo.qerrordemoplot(q,f_t,xi,mu_t,v_t,err)</code></pre>
+        </div>
+
+        <div id="section8" class="section-content">
+            <h3>EEG SIGNAL PROCESSING</h3>
+            
+            <h4>EEG Signal Analysis and Filtering</h4>
+            <pre><code>clc; clear; close all;
+Fs = 256; 
+t = 0:1/Fs:10;
+eeg = 30*sin(2*pi*2*t) + ...   
+      20*sin(2*pi*6*t) + ...   
+      15*sin(2*pi*10*t) + ...  
+      10*sin(2*pi*20*t) + ...  
+      5*randn(size(t));        
+figure;
+plot(t, eeg, 'b');
+xlabel('Time (s)');
+ylabel('Amplitude (µV)');
+title('Raw EEG Signal');
+grid on;
+
+low_cutoff = 0.5;
+high_cutoff = 40;
+[b, a] = butter(4, [low_cutoff high_cutoff]/(Fs/2), 'bandpass');
+eeg_filt = filtfilt(b, a, eeg);
+figure;
+plot(t, eeg_filt, 'r');
+xlabel('Time (s)');
+ylabel('Amplitude (µV)');
+title('Filtered EEG Signal (0.5–40 Hz)');
+grid on;
+
+[pxx, f] = pwelch(eeg_filt, hamming(512), 256, 512, Fs);
+figure;
+plot(f, 10*log10(pxx));
+xlabel('Frequency (Hz)');
+ylabel('Power/Frequency (dB/Hz)');
+title('EEG Power Spectral Density');
+grid on;
+
+delta_band = bandpower(pxx, f, [0.5 4], 'psd');
+theta_band = bandpower(pxx, f, [4 8], 'psd');
+alpha_band = bandpower(pxx, f, [8 13], 'psd');
+beta_band = bandpower(pxx, f, [13 30], 'psd');
+bands = {'Delta', 'Theta', 'Alpha', 'Beta'};
+values = [delta_band, theta_band, alpha_band, beta_band];
+figure;
+bar(values);
+set(gca, 'XTickLabel', bands);
+ylabel('Power (µV^2)');
+title('EEG Band Power Distribution');
+grid on;</code></pre>
+        </div>
+
+        <div id="section9" class="section-content">
+            <h3>ECG SIGNAL PROCESSING</h3>
+            
+            <h4>ECG Signal Analysis and Heart Rate Detection</h4>
+            <pre><code>clear; clc; close all;
+
+fs = 360;
+t = 0:1/fs:5;
+ecg = 1.5*sin(2*pi*1.2*t) + 0.5*sin(2*pi*3*t);
+ecg = ecg + 0.8*randn(size(t));
+
+[b, a] = butter(2, [0.5 40]/(fs/2), 'bandpass');
+ecg_filt = filtfilt(b, a, ecg);
+
+[~, locs_R] = findpeaks(ecg_filt, 'MinPeakHeight', mean(ecg_filt)+0.5*std(ecg_filt), ...
+    'MinPeakDistance', 0.25*fs);
+
+RR_intervals = diff(locs_R)/fs;
+HR = 60 ./ RR_intervals;
+
+figure;
+plot(t, ecg_filt, 'b'); hold on;
+plot(t(locs_R), ecg_filt(locs_R), 'ro', 'MarkerFaceColor', 'r');
+xlabel('Time (s)'); ylabel('Amplitude (mV)');
+title('ECG Signal with R-peaks Detected');
+legend('Filtered ECG', 'R-peaks');
+grid on;
+
+fprintf('Number of heart beats detected: %d\n', length(locs_R));
+
+if ~isempty(HR)
+    fprintf('Average Heart Rate: %.2f bpm\n', mean(HR));
+else
+    fprintf('Not enough peaks to compute HR.\n');
+end
+
+figure;
+plot(HR, 'r-o');
+xlabel('Beat Number'); ylabel('Heart Rate (bpm)');
+title('Heart Rate Variation');
+grid on;</code></pre>
+        </div>
+
+        <div id="section10" class="section-content">
+            <h3>Section 10</h3>
+            <p>This section is currently empty.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            
+            if (username === 'batman' && password === 'batman') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+                errorMsg.textContent = '';
+            } else {
+                errorMsg.textContent = 'Invalid username or password!';
+            }
+        });
+
+        function showSection(sectionNum) {
+            // Hide all sections
+            for (let i = 1; i <= 10; i++) {
+                document.getElementById('section' + i).classList.remove('active');
+            }
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.section-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById('section' + sectionNum).classList.add('active');
+            
+            // Add active class to clicked button
+            document.querySelectorAll('.section-btn')[sectionNum - 1].classList.add('active');
+        }
+
+        function logout() {
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMsg').textContent = '';
+        }
+    </script>
+</body>
+</html>
