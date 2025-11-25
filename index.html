@@ -67,537 +67,282 @@
     <div id="mainContainer" class="main-container">
         
         <div class="header">
-            <h1>DSP Laboratory Portal</h1>
+            <h1>VLSI Laboratory Portal</h1>
             <p>Digital Signal Processing Experiments</p>
         </div>
 
         <div class="sections-nav">
-            <div class="section-btn active" onclick="showSection(1)">Section 1: Waveform Generation</div>
-            <div class="section-btn" onclick="showSection(2)">Section 2: Linear & Circular Convolution</div>
-            <div class="section-btn" onclick="showSection(3)">Section 3: FFT and IFFT Using DIT and DIF</div>
-            <div class="section-btn" onclick="showSection(4)">Section 4: Discrete Fourier Transform Pair</div>
-            <div class="section-btn" onclick="showSection(5)">Section 5: Design of FIR Filter Using Windowing Technique</div>
-            <div class="section-btn" onclick="showSection(6)">Section 6: Design of IIR Filter Using Impulse Invariance and Bilinear Transformation Technique</div>
-            <div class="section-btn" onclick="showSection(7)">Section 7: Quantization Effects in Digital Filter Design</div>
-            <div class="section-btn" onclick="showSection(8)">Section 8: EEG</div>
-            <div class="section-btn" onclick="showSection(9)">Section 9: ECG</div>
-            <div class="section-btn" onclick="showSection(10)">Section 10</div>
+            <div class="section-btn active" onclick="showSection(1)">Section 1: 4-BIT ARITHMETIC AND LOGIC UNIT</div>
+            <div class="section-btn" onclick="showSection(2)">Section 2: 4-BIT PARALLEL ADDER CIRCUIT</div>
+            <div class="section-btn" onclick="showSection(3)">Section 3: 4-BIT ARRAY MULTIPLIER</div>
+            <div class="section-btn" onclick="showSection(4)">Section 4: ONE – BIT STORAGE DEVICE: FLIP FLOPS</div>
+            <div class="section-btn" onclick="showSection(5)">Section 5: IMPLEMENTATION OF 4X1 MULTIPLEXER</div>
+            <div class="section-btn" onclick="showSection(6)">Section 6: 4-BIT SYNCHRONOUS COUNTER</div>
+            <div class="section-btn" onclick="showSection(7)">Section 7: SHIFT REGISTERS</div>
+
         </div>
 
         <div id="section1" class="section-content active">
-            <h3>1. Objective:</h3>
-            <p>To generate sine, cosine, sawtooth, square, exponential, impulse, ramp, step waveforms in continuous and discrete forms using MATLAB.</p>
-
-            <h3>2. System and software tools required:</h3>
-            <p>DELL 18.5'' OPTIPLEX-380<br>MATLAB 7.1</p>
-
-            <h3>3. Pre Lab work:</h3>
-            <h4>3.1 Theory</h4>
-            <p>The sine wave or sinusoid is a mathematical curve that describes a smooth repetitive oscillation representing an AC signal whose function is given by, <code>y(t) = A sin(ωt + φ)</code></p>
+            <h3>4-BIT ARITHMETIC AND LOGIC UNIT</h3>
+            <p><strong>Date:</strong></p>
+            <p><strong>Aim:</strong></p>
             
-            <p><strong>Where:</strong><br>
-            A – Amplitude in Volts<br>
-            ω = 2πf – Angular Frequency in Hertz<br>
-            f – Frequency in Hertz<br>
-            t – Time Period in Seconds<br>
-            φ – Phase Angle in degrees</p>
+            <h4>VHDL Code for 4-bit ALU:</h4>
+            <pre><code>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
-            <p>A cosine wave is a signal waveform with a shape identical to that of a sine wave, except each point on the cosine wave occurs exactly 1/4 cycle earlier than the corresponding point on the sine wave. A cosine wave and its corresponding sine wave have the same frequency, but the cosine wave leads the sine wave by 90 degrees of phase whose function is given by:</p>
-            <code>cos(x) = sin(x + π/2)</code>
+entity alu is
+Port ( inp_a : in signed (3 downto 0);
+       inp_b: in signed (3 downto 0);
+       sel: in STD_LOGIC_VECTOR (2 downto 0);
+       out_alu: out signed (3 downto 0));
+end alu;
 
-            <p>Sawtooth Waveforms are another type of periodic waveform whose shape resembles the teeth of a saw blade. The sawtooth wave contains a fundamental and both odd and even harmonics. Square-wave Waveforms are used extensively in electronic and microelectronic circuits for clock and timing control signals as they are symmetrical waveforms of equal and square duration representing each half of a cycle and nearly all digital logic circuits use square wave waveforms on their input and output gates.</p>
-
-            <p>Exponential waveform is a non-repetitive waveform that rises or falls exponentially from some initial value at some initial time whose function is given by, <code>y(t) = e^(at)</code></p>
-            
-            <p><strong>Where:</strong><br>
-            a > 0, the waveform rises without bound<br>
-            a < 0, the waveform decays to zero.</p>
-
-            <p>An impulse voltage is a uni-directional voltage that rises from zero to a maximum value in a very short time and dies away more or less to zero in a comparatively greater time. A ramp function is a function of voltage that increases or decreases linearly with time. The slope of the ramp function is always constant. A Step function makes an instantaneous jump from one steady value to another steady value. A step means an instantaneous change in level.</p>
-
-            <h4>3.2 Algorithm</h4>
-            <ol>
-                <li>Assign t and n values for the waveform generation.</li>
-                <li>Write the expression for the required waveform.</li>
-                <li>Choose the number of rows and columns to plot all the waveforms.</li>
-                <li>Generate the above said waveforms in continuous form using inbuilt functions.</li>
-                <li>Repeat the step 4 for generating the same waveforms in discrete form.</li>
-                <li>Plot all the graphs</li>
-            </ol>
-
-            <h3>4. In Lab work:</h3>
-            <h4>4.1 Sample coding/debugging</h4>
-            <pre><code>sin(2*pi*f*t)
-cos(2*pi*f*t)
-square(2*pi*f*t)
-sawtooth(2*pi*f*t)
-exp(0.25*t)
-ones(1,11)</code></pre>
-
-            <h4>4.2 Test Cases</h4>
-            <pre><code>xlabel(AX,...)
-ylabel(AX,...)
-title('text')</code></pre>
-
-            <h4>4.3 Program</h4>
-            <pre><code>%Continuous waveforms
-%sine waveform generation
-clc;
-clear all;
-t=0:0.1:3;
-x=sin(2*pi*1*t);
-subplot(3,3,1);
-plot(t,x,'--rs');
-title('sin waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%cosine waveform generation
-y=cos(2*pi*1*t);
-subplot(3,3,2);
-plot(t,y,'--rs');
-title('cos waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%sawtooth waveform generation
-t=0:0.1:3;
-z=sawtooth(2*pi*1*t);
-subplot(1,1,1);
-plot(t,z,'--rs');
-title('sawtooth waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%square waveform generation
-t=0:0.1:5;
-w=square(2*pi*1*t);
-subplot(1,1,1);
-plot(t,w,'--rs');
-title('square waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%exp +ve waveform generation
-t=0:0.5:10;
-c=exp(0.25*t); // formula
-subplot(1,1,1);
-plot(t,c,'--rs');
-title('exponential growing waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%exp -ve waveform generation
-t=0:0.5:10;
-d=exp(-0.25*t);
-subplot(1,1,1);
-plot(t,d,'--rs');
-title('exponential decaying waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%unit step waveform generation
-t=0:1:10;
-e=ones(1,11); // formula 1 row , 11 columns
-subplot(1,1,1);
-plot(t,e,'--rs');
-title('unit step waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%ramp waveform
-t=0:1:10;
-f=t; // formula
-subplot(1,1,1);
-plot(t,f,'--rs');
-title('ramp waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%impulse waveform
-t= -5 to 1 => zeros , t=1to 5 => zeros; t=0 => ones (1,1)
-t=-5:1:5;
-m=[zeros(1,5) ones(1,1) zeros(1,5)];
-subplot(1,1,1);
-plot(t,m,'--rs');
-title('impulse waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%discrete waveforms
-%sine waveform generation
-clc;
-clear all;
-t=0:0.1:2;
-x=sin(2*pi*1*t);
-subplot(3,3,1);
-stem(t,x,'--gs');
-title('sin waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%cosine waveform generation
-y=cos(2*pi*1*t);
-subplot(3,3,2);
-stem(t,y,'--bs');
-title('cos waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%sawtooth waveform generation
-z=sawtooth(2*pi*1*t);
-subplot(3,3,3);
-stem(t,z,'--rs');
-title('sawtooth waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%square waveform generation
-t=0:0.1:2;
-w=square(2*pi*1*t);
-subplot(3,3,4);
-stem(t,w,'--rs');
-title('square waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%growing exp waveform generation
-t=0:0.5:10;
-c=exp(0.25*t);
-subplot(3,3,5);
-stem(t,c,'--rs');
-title('exponential waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%decaying exp waveform generation
-d=exp(-0.25*t);
-subplot(3,3,6);
-stem(t,d,'--rs');
-title('exponential waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%unit step waveform generation
-t=0:1:10;
-s=ones(1,11);
-subplot(3,3,7);
-stem(t,s,'--rs');
-title('unit step waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%ramp waveform
-f=t;
-subplot(3,3,8);
-stem(t,f,'--rs');
-title('ramp waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-
-%impulse waveform
-t=-5:1:5;
-m=[zeros(1,5) ones(1,1) zeros(1,5)];
-subplot(3,3,9);
-stem(t,m,'--rs');
-title('impulse waveform');
-xlabel('time in millisec');
-ylabel('amplitude in volts');</code></pre>
+architecture Behavioral of alu is
+begin
+process(inp_a, inp_b, sel)
+begin
+case sel is
+    when "000" => out_alu<= inp_a + inp_b; -- addition
+    when "001" => out_alu<= inp_a - inp_b; -- subtraction
+    when "010" => out_alu<= inp_a - 1; -- sub 1
+    when "011" => out_alu<= inp_a + 1; -- add 1
+    when "100" => out_alu<= inp_a and inp_b; --AND gate
+    when "101" => out_alu<= inp_a or inp_b; --OR gate
+    when "110" => out_alu<= not inp_a; --NOT gate
+    when "111" => out_alu<= inp_a xor inp_b; --XOR gate
+    when others => NULL;
+end case;
+end process;
+end Behavioral;</code></pre>
         </div>
 
         <div id="section2" class="section-content">
-            <h3>LINEAR CONVOLUTION AND CIRCULAR CONVOLUTION</h3>
+            <h3>4-BIT PARALLEL ADDER CIRCUIT</h3>
             
-            <h4>4.3 Program</h4>
-            <pre><code>%using in-built function
-clc;
-clearall;
-xn=[1 2 3 1];
-hn=[1 1 1 1];
-yn=cconv(xn,hn,4);
-disp(yn);
-subplot(3,1,1);
-stem(xn);
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-subplot(3,1,2);
-stem(hn);
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-subplot(3,1,3);
-stem(yn);
-title('circular convolution');
-xlabel('time in millisec');
-ylabel('amplitude in volts');
+            <pre><code>library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
 
-%using DFT pair
-clc;
-clear all;
-xn= [1 2 3 1]; // xn=input('Enter the sequence x(n):');
-hn= [1 1 1 1]; // hn=input('Enter the sequence h(n):');
-L=length(xn);
-M=length(hn);
-N=max(L,M);
-xn=[xn zeros(1,N-L)];
-hn=[hn zeros(1,N-M)];
-for K = 0:N-1
-    for n = 0:N-1
-        p = exp(-1j*2*pi*n*K/N);
-        a(K+1,n+1) = p;
-    end
-end
-XK=xn*a;
-for K = 0:N-1
-    for n = 0:N-1
-        p = exp(-1j*2*pi*n*K/N);
-        a(K+1,n+1) = p;
-    end
-end
-HK=hn*a;
-YK=XK.*HK;
-for n = 0:N-1
-    for K = 0:N-1
-        p = exp(1j*2*pi*n*K/N);
-        a(n+1,k+1) = p;
-    end
-end
-yn1=(YK*a)/N;
-disp('circular convolution using DFT:');
-disp(yn1);
+entity Ripple_Adder is
+Port ( A : in STD_LOGIC_VECTOR (3 downto 0);
+       B : in STD_LOGIC_VECTOR (3 downto 0);
+       Cin : in STD_LOGIC;
+       S : out STD_LOGIC_VECTOR (3 downto 0);
+       Cout : out STD_LOGIC);
+end Ripple_Adder;
 
-%using FFT pair
-XK=fft(xn,N);
-HK=fft(hn,N);
-YK=XK.*HK;
-yn2=ifft(YK,N);
-disp(yn2);
+architecture Behavioral of Ripple_Adder is
+-- Full Adder VHDL Code Component Decalaration
+component full_adder_vhdl_code
+Port ( A : in STD_LOGIC;
+       B : in STD_LOGIC;
+       Cin : in STD_LOGIC;
+       S : out STD_LOGIC;
+       Cout : out STD_LOGIC);
+end component;
 
-%using matrix multiplication
-xn1=[ ];
-xn=xn';
-hn=hn';
-for i=1:N
-    xn1(:,i)=circshift(xn,i-1);
-end
-yn3=xn1*hn;
-yn3=yn3';
-disp(yn3);
-subplot(3,1,1);
-stem(xn);
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-subplot(3,1,2);
-stem(hn);
-xlabel('time in millisec');
-ylabel('amplitude in volts');
-subplot(3,1,3);
-stem(yn3);
-title('circular convolution');
-xlabel('time in millisec');
-ylabel('amplitude in volts');</code></pre>
+-- Intermediate Carry declaration
+signal c1,c2,c3: STD_LOGIC;
 
-            <h4>4.4 Execution of the program</h4>
-            <p><strong>Output:</strong></p>
-            <pre><code>Enter the sequence x(n):[1 -1 -2 3 1]
-Enter the sequence h(n):[1 1 1]
-circular convolution using DFT:
-5.0000 + 0.0000i 1.0000 - 0.0000i -2.0000 - 0.0000i -0.0000 + 0.0000i 2.0000 + 0.0000i
-circular convolution using FFT:
-5.0000 1.0000 -2.0000 0.0000 2.0000</code></pre>
+begin
+-- Port Mapping Full Adder 4 times
+FA1: full_adder_vhdl_code port map( A(0), B(0), Cin, S(0), c1);
+FA2: full_adder_vhdl_code port map( A(1), B(1), c1, S(1), c2);
+FA3: full_adder_vhdl_code port map( A(2), B(2), c2, S(2), c3);
+FA4: full_adder_vhdl_code port map( A(3), B(3), c3, S(3), Cout);
+end Behavioral;</code></pre>
         </div>
 
         <div id="section3" class="section-content">
-            <h3>FFT and IFFT Using DIT and DIF Algorithm</h3>
+            <h3>4-BIT ARRAY MULTIPLIER</h3>
             
-            <h4>4.3 Program</h4>
-            
-            <h4>DIT-FFT</h4>
-            <pre><code>% Fast fourier transform - DIT using in-built function
-clc;
-clear all;
-x=input('Enter the input sequence:');
-N=length(x);
-y=fft(x,N);
-disp('FFT-DIT o/p using in-built fn:');
-disp(y);
+            <pre><code>library ieee;
+use ieee.std_logic_1164.all;
 
-% FFT-DIT using algorithm
-y=bitrevorder(x);
-w1=1;
-w2=0.707-0.707j;
-w3=-1j;
-w4=-0.707-0.707j;
+entity andg is
+port(a,b:in std_logic;
+     c:out std_logic);
+end andg;
 
-%calculation of stage 1
-for K=1:2:N
-    s1(K)=y(K)+y(K+1);
-    s1(K+1)=y(K)-y(K+1);
-end
-disp('o/p of 1st stage');
-disp(s1);
+architecture andg_arch of andg is
+begin
+c<=a and b;
+end andg_arch;
 
-%calculation of stage 2
-for K=1:4:N
-    s2(K)=s1(K)+s1(K+2);
-    s2(K+1)=s1(K+1)+w3*s1(K+3);
-    s2(K+2)=s1(K)-s1(K+2);
-    s2(K+3)=s1(K+1)-w3*s1(K+3);
-end
-disp('o/p of 2nd stage');
-disp(s2);
+--HALF ADDER SUB PROGRAM
+library ieee;
+use ieee.std_logic_1164.all;
 
-%calculation of stage 3
-for K=1:8:N
-    s3(K)=s2(K)+s2(K+4);
-    s3(K+1)=s2(K+1)+w2*s2(K+5);
-    s3(K+2)=s2(K+2)+w3*s2(K+6);
-    s3(K+3)=s2(K+3)+w4*s2(K+7);
-    s3(K+4)=s2(K)-s2(K+4);
-    s3(K+5)=s2(K+1)-w2*s2(K+5);
-    s3(K+6)=s2(K+2)-w3*s2(K+6);
-    s3(K+7)=s2(K+3)-w4*s2(K+7);
-end
-disp('o/p of 3rd stage :');
-disp(s3);
+entity ha is
+port(a,b:in std_logic;
+     s,c:out std_logic);
+end ha;
 
-%magnitude and phase plot
-disp('magnitude and phase response of FFT-DIT sequence:');
-subplot(2,1,1);
-stem(20*log10(abs(s3)));
-title('Magnitude plot');
-xlabel('sample(n)');
-ylabel('magnitude');
-subplot(2,1,2);
-stem(angle(s3));
-title('phase plot');
-xlabel('sample(n)');
-ylabel('phase');</code></pre>
+architecture haa of ha is
+begin
+s<=a xor b;
+c<=a and b;
+end haa;
 
-            <h4>DIF-FFT</h4>
-            <pre><code>% Fast fourier transform - DIF using in-built
-clc;
-clear all;
-y=input('Enter the input sequence:');
-N=length(y);
-x=fft(y,N);
-disp('calculation of FFT-DIF');
-disp('FFT-DIF o/p using in-built fn:');
-disp(x);
+--FULL ADDER SUB PROGRAM
+library ieee;
+use ieee.std_logic_1164.all;
 
-% Fast fourier transform - DIF using algorithm
-w1=1;
-w2=0.707-0.707j;
-w3=-1j;
-w4=-0.707-0.707j;
+entity fa is
+port(a,b,c:in std_logic;
+     s,ca:out std_logic);
+end fa;
 
-%calculation of stage 1
-for K=1:8:N
-    s1(K)=y(K)+y(K+4);
-    s1(K+1)=y(K+1)+y(K+5);
-    s1(K+2)=y(K+2)+y(K+6);
-    s1(K+3)=y(K+3)+y(K+7);
-    s1(K+4)=(y(K)-y(K+4))*w1;
-    s1(K+5)=(y(K+1)-y(K+5))*w2;
-    s1(K+6)=(y(K+2)-y(K+6))*w3;
-    s1(K+7)=(y(K+3)-y(K+7))*w4;
-end
-disp('FFT-DIF o/p using algorithm:');
-disp('o/p of 1st stage :');
-disp(s1);
+architecture fa_arch_data of fa is
+begin
+s<=a xor b xor c;
+ca<=(a and b) or (c and b) or (a and c) ;
+end fa_arch_data;
 
-%calculation of stage 2
-for K=1:4:N
-    s2(K)=s1(K)+s1(K+2);
-    s2(K+1)=s1(K+1)+s1(K+3);
-    s2(K+2)=(s1(K)-s1(K+2))*w1;
-    s2(K+3)=(s1(K+1)-s1(K+3))*w3;
-end
-disp('o/p of 2nd stage :');
-disp(s2);
+--ARRARY MULTIPLIER
+--STRUCTURAL MODELLING
+library ieee;
+use ieee.std_logic_1164.all;
 
-%calculation of stage 3
-for K=1:2:N
-    s3(K)=s2(K)+s2(K+1);
-    s3(K+1)=s2(K)-s2(K+1);
-end
-x=bitrevorder(s3);
-disp('o/p of 3rd stage :');
-disp(x);
+entity am is
+port(a,b:in std_logic_vector(3 downto 0);
+     p:out std_logic_vector(7 downto 0));
+end am;
 
-%magnitude and phase plot
-disp('magnitude and phase response of FFT-DIF sequence:');
-subplot(2,1,1);
-stem(20*log10(abs(x)));
-title('Magnitude plot');
-xlabel('sample(n)');
-ylabel('magnitude');
-subplot(2,1,2);
-stem(angle(x));
-title('phase plot');
-xlabel('sample(n)');
-ylabel('phase');</code></pre>
+architecture ama of am is
+signal x: std_logic_vector (15 downto 0);
+signal s: std_logic_vector (5 downto 0);
+signal c:std_logic_vector(10 downto 0);
 
-            <h4>4.4 Execution of the program</h4>
-            <pre><code>Enter the input sequence:[ 1 3 5 7 7 5 3 1]
-FFT-DIT o/p using in-built fn:
-Columns 1 through 6
-32.0000 -11.6569 - 4.8284i 0 -0.3431 - 0.8284i 0 -0.3431 + 0.8284i
-Columns 7 through 8
-0 -11.6569 + 4.8284i
+component andg
+port(a,b: in std_logic;
+     c:out std_logic);
+end component;
 
-o/p of 1st stage
-8 -6 8 2 8 -2 8 6
+component ha
+port(a,b: in std_logic;
+     s,c: out std_logic);
+end component;
 
-o/p of 2nd stage
-Columns 1 through 6
-16.0000 -6.0000 - 2.0000i 0 -6.0000 + 2.0000i 16.0000 -2.0000 - 6.0000i
-Columns 7 through 8
-0 -2.0000 + 6.0000i
+component fa
+port(a,b,c: in std_logic;
+     s,ca: out std_logic);
+end component;
 
-o/p of 3rd stage
-Columns 1 through 6
-32.0000 -11.6560 - 4.8280i 0 -0.3440 - 0.8280i 0 -0.3440 + 0.8280i
-Columns 7 through 8
-0 -11.6560 + 4.8280i</code></pre>
+begin
+a1: andg port map(a(0),b(0),x(0));
+a2: andg port map(a(1),b(0),x(1));
+a3: andg port map(a(2),b(0),x(2));
+a4: andg port map(a(3),b(0),x(3));
+a5: andg port map(a(0),b(1),x(4));
+a6: andg port map(a(1),b(1),x(5));
+a7: andg port map(a(2),b(1),x(6));
+a8: andg port map(a(3),b(1),x(7));
+a9: andg port map(a(0),b(2),x(8));
+a10: andg port map(a(1),b(2),x(9));
+a11: andg port map(a(2),b(2),x(10));
+a12: andg port map(a(3),b(2),x(11));
+a13: andg port map(a(0),b(3),x(12));
+a14: andg port map(a(1),b(3),x(13));
+a15: andg port map(a(2),b(3),x(14));
+a16: andg port map(a(3),b(3),x(15));
+
+ha1: ha port map(x(1),x(4),p(1),c(0));
+fa1: fa port map(c(0),x(5),x(2),s(0),c(1));
+fa2: fa port map(c(1),x(6),x(3),s(1),c(2));
+ha2: ha port map(c(2),x(7),s(2),c(3));
+
+ha3: ha port map(x(8),s(0),p(2),c(4));
+fa3: fa port map(c(4),x(9),s(1),s(3),c(5));
+fa4: fa port map(c(5),x(10),s(2),s(4),c(6));
+fa5: fa port map(x(11),c(3),c(6),s(5),c(7));
+
+ha4: ha port map(x(12),s(3),p(3),c(8));
+fa6: fa port map(c(8),x(13),s(4),p(4),c(9));
+fa7: fa port map(c(9),x(14),s(5),p(5),c(10));
+fa8: fa port map(c(10),x(15),c(7),p(6),p(7));
+
+p(0)<=x(0);
+end ama;</code></pre>
         </div>
 
         <div id="section4" class="section-content">
-            <h3>DISCRETE FOURIER TRANSFORM PAIR</h3>
+            <h3>ONE – BIT STORAGE DEVICE: FLIP FLOPS</h3>
             
-            <h4>4.3 Programs</h4>
-            
-            <h4>DFT (Discrete Fourier Transform)</h4>
-            <pre><code>%DFT
-clc;
-clear all;
-xn= [1 2 1 2] ; //xn= input('Enter the input sequence xn=');
-N=length(xn);
-for K = 0:N-1
-    for n = 0:N-1
-        p = exp(-1j*2*pi*n*K/N);
-        a(K+1,n+1) = p;
-    end
-end
-XK=xn*a;
-disp('dft output:');
-disp(XK);
-%magnitude and phase plot
-disp('magnitude and phase response of DFT sequence:');
-subplot(2,1,1);
-stem(abs(XK));
-title('Magnitude plot');
-xlabel('sample(n)');
-ylabel('magnitude');
-subplot(2,1,2);
-stem(angle(XK));
-title('phase plot');
-xlabel('sample(n)');
-ylabel('phase');</code></pre>
-            
-            <h4>IDFT (Inverse Discrete Fourier Transform)</h4>
-            <pre><code>%IDFT
-M=length(XK);
-for n = 0:M-1
+            <h4>D FLIP FLOP</h4>
+            <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity dff is
+port(D,clk,s,r:in std_logic;
+     q,qb:inout std_logic);
+end dff;
+
+architecture dff_arch of dff is
+begin
+process(s,r,D,clk)
+begin
+if(clk='1' and clk'event) then
+    if s='1' then q<='1'; qb<='0';
+    elsif r='1' then q<='0';qb<='1';
+    else q<=D;qb<=not D;
+    end if;
+end if;
+end process;
+end dff_arch;</code></pre>
+
+            <h4>JK FLIP FLOP</h4>
+            <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity jkff is
+port(j,k,clk,s,r:in std_logic;
+     q,qb:inout std_logic);
+end jkff;
+
+architecture jkff_arch of jkff is
+begin
+process(s,r,j,k,clk)
+begin
+if(clk='1' and clk'event)then
+    if s='1' then q<='1';qb<='0';
+    elsif r='1' then q<='0';qb<='1';
+    else
+        if (j='0' and k='0') then q<=q;qb<=not q;
+        elsif (j='0' and k='1') then q<='0';qb<='1';
+        elsif (j='1' and k='0') then q<='1';qb<='0';
+        elsif (j='1' and k='1') then q<=not q;qb<=not(qb);
+        end if;
+    end if;
+end if;
+end process;
+end jkff_arch;</code></pre>
+
+            <h4>T FLIP FLOP</h4>
+            <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity tff is
+port(t,clk,s,r:in std_logic;
+     q,qb:inout std_logic);
+end tff;
+
+architecture tff_arch of tff is
+begin
+process(s,r,t,clk)
+begin
+if(clk='1' and clk'event)then
+    if s='1' then q<='1';qb<='0';
+    elsif r='1' then q<='0';qb<='1';
+    else
+        if t='0' then q<=q;qb<=not q;
+        elsif t='1' then q<=not q;qb<=q;
+        end if;
+    end if;
+end if;
+end process;
+end tff_arch;</code></pre> = 0:M-1
     for K = 0:M-1
         p = exp(1j*2*pi*n*K/M);
         a(n+1,K+1) = p;
@@ -609,393 +354,229 @@ disp(xn);</code></pre>
         </div>
 
         <div id="section5" class="section-content">
-            <h3>DESIGN OF FIR FILTER USING WINDOWING TECHNIQUE</h3>
+            <h3>IMPLEMENTATION OF 4X1 MULTIPLEXER</h3>
             
-            <h4>4.3 Program</h4>
-            
-            <h4>FIR LOW PASS FILTER DESIGN</h4>
-            <pre><code>%FIR LOW PASS FILTER DESIGN
-clc;
-clear all;
-disp('FIR LOW PASS FILTER DESIGN');
-N=input('enter the order of the filter:');
-wc=input('enter the cut-off frequency:');
-n=0:1:N-1;
-M=(N-1)/2;
-disp('desired filter coefficient:');
-for n=0:N-1
-    if(n==M)
-        hd(n+1)=(wc/pi);
-    else
-        hd(n+1)=sin(wc*(n-M))./(pi*(n-M));
-    end
-end
-disp(hd);
-disp('rectangular window sequence:');
-n=0:N-1;
-w1(n+1)=1;
-disp(w1);
-disp('Filter coefficient 1:');
-for n=0:N-1
-    h1(n+1)=hd(n+1).*w1(n+1);
-end
-disp(h1);
-disp('hanning window sequence:');
-n=0:N-1;
-w2(n+1)=0.5-0.5*cos(2*n*pi/(N-1));
-disp(w2);
-disp('Filter coefficient 2:');
-for n=0:N-1
-    h2(n+1)=hd(n+1).*w2(n+1);
-end
-disp(h2);
-w=0:0.01:pi;
-H1=freqz(h1,1,w);
-plot(w/pi,abs(H1),':');
-hold on;
-H2=freqz(h2,1,w);
-plot(w/pi,abs(H2));
-grid on;
-title('magnitude plot');
-xlabel('normalized frequency in rad/sec');
-ylabel('magnitude in db');
-hold off;</code></pre>
-            
-            <h4>FIR HIGH PASS FILTER DESIGN</h4>
-            <pre><code>%FIR HIGH PASS FILTER DESIGN
-clc;
-clear all;
-disp('FIR HIGH PASS FILTER DESIGN');
-N=input('enter the order of the filter:');
-wc=input('enter the cut-off frequency:');
-n=0:1:N-1;
-M=(N-1)/2;
-disp('desired filter coefficient:');
-for n=0:N-1
-    if(n==M)
-        hd(n+1)=1-(wc/pi);
-    else
-        hd(n+1)=sin(pi*(n-M))-sin(wc*(n-M))/(pi*(n-M));
-    end
-end
-disp(hd);
-disp('rectangular window sequence:');
-n=0:N-1;
-w1(n+1)=1;
-disp(w1);
-disp('Filter coefficient 1:');
-for n=0:N-1
-    h1(n+1)=hd(n+1).*w1(n+1);
-end
-disp(h1);
-disp('hamming window sequence:');
-n=0:N-1;
-w2(n+1)=0.54-0.46*cos(2*n*pi/(N-1));
-disp(w2);
-disp('Filter coefficient 2:');
-for n=0:N-1
-    h2(n+1)=hd(n+1).*w2(n+1);
-end
-disp(h2);
-w=0:0.01:pi;
-H1=freqz(h1,1,w);
-plot(w/pi,abs(H1),':');
-hold on;
-H2=freqz(h2,1,w);
-plot(w/pi,abs(H2));
-grid on;
-title('magnitude plot');
-xlabel('normalized frequency in rad/sec');
-ylabel('magnitude in db');
-hold off;</code></pre>
-            
-            <h4>FIR BAND PASS FILTER DESIGN</h4>
-            <pre><code>%FIR BAND PASS FILTER DESIGN
-clc;
-clear all;
-disp('FIR BAND PASS FILTER DESIGN');
-N=input('enter the order of the filter:');
-wc1=input('enter the cut-off frequency 1:');
-wc2=input('enter the cut-off frequency 2:');
-n=0:1:N-1;
-M=(N-1)/2;
-disp('desired filter coefficient:');
-for n=0:N-1
-    if(n==M)
-        hd(n+1)=(wc2-wc1)/pi;
-    else
-        hd(n+1)=(sin(wc2*(n-M))-sin(wc1*(n-M)))./(pi*(n-M));
-    end
-end
-disp(hd);
-disp('rectangular window sequence:');
-n=0:N-1;
-w1(n+1)=1;
-disp(w1);
-disp('Filter coefficient 1:');
-for n=0:N-1
-    h1(n+1)=hd(n+1).*w1(n+1);
-end
-disp(h1);
-disp('hamming window sequence:');
-n=0:N-1;
-w2(n+1)=0.54-0.46*cos(2*n*pi/(N-1));
-disp(w2);
-disp('Filter coefficient 2:');
-for n=0:N-1
-    h2(n+1)=hd(n+1).*w2(n+1);
-end
-disp(h2);
-w=0:0.01:pi;
-H1=freqz(h1,1,w);
-plot(w/pi,abs(H1),':');
-hold on;
-H2=freqz(h2,1,w);
-plot(w/pi,abs(H2));
-grid on;
-title('magnitude plot');
-xlabel('normalized frequency in rad/sec');
-ylabel('magnitude in db');
-hold off;</code></pre>
-            
-            <h4>FIR BAND REJECT FILTER DESIGN</h4>
-            <pre><code>%FIR BAND REJECT FILTER DESIGN
-clc;
-clear all;
-disp('FIR BAND REJECT FILTER DESIGN');
-N=input('enter the order of the filter:');
-wc1=input('enter the cut-off frequency 1:');
-wc2=input('enter the cut-off frequency 2:');
-n=0:1:N-1;
-M=(N-1)/2;
-disp('desired filter coefficient:');
-for n=0:N-1
-    if(n==M)
-        hd(n+1)=1-(wc2-wc1)/pi;
-    else
-        hd(n+1)=(sin(wc1*(n-M))-sin(wc2*(n-M))+sin(pi*(n-M)))./(pi*(n-M));
-    end
-end
-disp(hd);
-disp('rectangular window sequence:');
-n=0:N-1;
-w1(n+1)=1;
-disp(w1);
-disp('Filter coefficient 1:');
-for n=0:N-1
-    h1(n+1)=hd(n+1).*w1(n+1);
-end
-disp(h1);
-disp('blackmann window sequence:');
-n=0:N-1;
-w2(n+1)=0.42-(0.5*cos(2*n*pi/(N-1)))+(0.08*cos(4*n*pi/(N-1)));
-disp(w2);
-disp('Filter coefficient 2:');
-for n=0:N-1
-    h2(n+1)=hd(n+1).*w2(n+1);
-end
-disp(h2);
-w=0:0.01:pi;
-H1=freqz(h1,1,w);
-plot(w/pi,abs(H1),':');
-hold on;
-H2=freqz(h2,1,w);
-plot(w/pi,abs(H2));
-grid on;
-title('magnitude plot');
-xlabel('normalized frequency in rad/sec');
-ylabel('magnitude in db');
-hold off;</code></pre>
+            <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity multiplexer is
+port(s1,s0,d0,d1,d2,d3 : in std_logic;
+     w: out std_logic);
+end multiplexer;
+
+architecture mux1 of multiplexer is
+signal sa,sb,p,q,r,s,t,u: std_logic;
+begin
+sa<=not(s1);
+sb<= not(s0);
+p<=sa and sb and d0;
+q<=sa and s0 and d1;
+r<=s1 and sb and d2;
+s<=s1 and s0 and d3;
+t<=p or q;
+u<=r or s;
+w<=t or u;
+end mux1;</code></pre>
         </div>
 
         <div id="section6" class="section-content">
-            <h3>DESIGN OF IIR FILTER USING IMPULSE INVARIANCE AND BILINEAR TRANSFORMATION TECHNIQUE</h3>
+            <h3>4-BIT SYNCHRONOUS COUNTER</h3>
             
-            <h4>Design of Digital Butterworth Filter</h4>
-            <pre><code>% design of digital Butterworth filter
-clc;
-clear all;
-disp('Design of Digital Butterworth Filter');
-disp('1.LowPass , 2.HighPass , 3.BandPass , 4.BandReject');
-f=input('Choose the required type of filter:');
-as=input('Enter the stop band attenuation');
-ap=input('Enter the pass band attenuation');
-ws=input('Enter the stop band frequency');
-wp=input('Enter the pass band frequency');
-[N wn]=buttord(wp,ws,ap,as);
-disp('Order of the Filter:');
-disp(N);
-switch f
-    case 1,
-        disp('Type1:Low pass filter');
-        [B A] = butter(N,wp,'low');
-    case 2,
-        disp('Type2:High pass filter');
-        [B A]=butter(N,wp,'high');
-    case 3,
-        disp('Type3:Band pass filter');
-        [B A]=butter(N,wp);
-    case 4,
-        disp('Type4:Band reject filter');
-        [B A]=butter(N,wp,'stop');
-end
-freqz(B,A);</code></pre>
-            
-            <h4>Design of Digital Chebyshev Filter</h4>
-            <pre><code>%design of digital chebyshev filter
-clc;
-clear all;
-disp('Design of Digital chebyshev Filter');
-disp('1.LowPass , 2.HighPass , 3.BandPass , 4.BandReject');
-f=input('choose the required type of filter:');
-as=input('Enter the stop band attenuation');
-ap=input('Enter the pass band attenuation');
-ws=input('Enter the stop band frequency');
-wp=input('Enter the pass band frequency');
-[N wn]=cheb1ord(wp,ws,ap,as);
-disp('Order of the Filter:');
-disp(N);
-R=0.5;
-switch f
-    case 1,
-        disp('Type1:Low pass filter');
-        [B A]=cheby1(N,R,wp,'low');
-    case 2,
-        disp('Type2:High pass filter');
-        [B A]=cheby1(N,R,wp,'high','s');
-    case 3,
-        disp('Type3:Band pass filter');
-        [B A]=cheby1(N,R,wp);
-    case 4,
-        disp('Type4:Band reject filter');
-        [B A]=cheby1(N,R,wp,'stop');
-end
-freqz(B,A);</code></pre>
+            <h4>PROGRAM:</h4>
+            <pre><code>--UPDOWN COUNTER
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity updc is
+port(clk,s,r,up:in std_logic;
+     count,countb:inout std_logic_vector(3 downto 0));
+end updc;
+
+architecture updc_a of updc is
+component notg
+port(a:in std_logic;b:out std_logic);
+end component;
+
+component andg
+port(a,b:in std_logic;c:out std_logic);
+end component;
+
+component org
+port(a,b:in std_logic;c:out std_logic);
+end component;
+
+component jkff
+port(j,k,clk,s,r:in std_logic;
+     q,qb:inout std_logic);
+end component;
+
+signal upinv:std_logic;
+signal a,b,o:std_logic_vector(2 downto 0);
+
+begin
+n1:notg port map(up,upinv);
+J1:jkff port map('1','1',clk,s,r,count(0),countb(0));
+A1:andg port map(up,count(0),a(0));
+A2:andg port map(upinv,countb(0),b(0));
+O1:org port map(a(0),b(0),o(0));
+J2:jkff port map(o(0),o(0),clk,s,r,count(1),countb(1));
+A3:andg port map(a(0),count(1),a(1));
+A4:andg port map(b(0),countb(1),b(1));
+O2:org port map(a(1),b(1),o(1));
+J3:jkff port map(o(1),o(1),clk,s,r,count(2),countb(2));
+A5:andg port map(a(1),count(2),a(2));
+A6:andg port map(b(1),countb(1),b(2));
+O3:org port map(a(2),b(2),o(2));
+J4:jkff port map(o(2),o(2),clk,s,r,count(3),countb(3));
+end updc_a;</code></pre>
         </div>
 
         <div id="section7" class="section-content">
-            <h3>QUANTIZATION EFFECTS IN DIGITAL FILTER DESIGN</h3>
+            <h3>SHIFT REGISTERS</h3>
             
-            <h4>Quantization Error Analysis</h4>
-            <pre><code>q = quantizer([8 7]);
-r = realmax(q);
-u = r*(2*rand(50000,1) - 1); % Uniformly distributed (-1,1)
-xi=linspace(-2*eps(q),2*eps(q),256);
-q = quantizer('fix',[8 7]);
-err = quantize(q,u) - u;
-f_t = errpdf(q,xi);
-mu_t = errmean(q);
-v_t = errvar(q);
-% Theoretical variance = eps(q)^2 / 3
-% Theoretical mean = 0
-fidemo.qerrordemoplot(q,f_t,xi,mu_t,v_t,err)</code></pre>
+            <h4>PROGRAM: SISO (Serial In Serial Out)</h4>
+            <pre><code>--D FLIP FLOP
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity dff is
+port (D,clk,s,r:in std_logic;q,qb:inout std_logic);
+end dff;
+
+architecture dff_arch of dff is
+begin
+process(s,r,D,clk)
+begin
+if(clk='1' and clk'event)then
+    if s='1' then q<='1';qb<='0';
+    elsif r='1' then q<='0';qb<='1';
+    else q<=D;qb<=not D;
+    end if;
+end if;
+end process;
+end dff_arch;
+
+--SISO
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity sisosr is
+port(din,clk,s,r:in std_logic;dout:inout std_logic);
+end sisosr;
+
+architecture a_siso of sisosr is
+component dff
+port(D,clk,s,r:in std_logic;q,qb:inout std_logic);
+end component;
+signal x,y,z,x1,y1,z1,db:std_logic;
+begin
+d1:dff port map(din,clk,s,r,x,x1);
+d2:dff port map(x,clk,s,r,y,y1);
+d3:dff port map(y,clk,s,r,z,z1);
+d4:dff port map(z,clk,s,r,dout,db);
+end a_siso;</code></pre>
+
+            <h4>SIPO (Serial In Parallel Out)</h4>
+            <pre><code>--SIPO
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity SIPO is
+port(din,clk,s,r: in std_logic;
+     op:inout std_logic_vector(3 downto 0));
+end SIPO;
+
+architecture arch_sipo of SIPO is
+component dff
+port(d,clk,s,r:in std_logic;
+     q,qb:inout std_logic);
+end component;
+signal t: std_logic_vector(3 downto 0);
+begin
+p1: dff port map(din,clk,s,r,op(0),t(0));
+p2: dff port map(op(0),clk,s,r,op(1),t(1));
+p3: dff port map(op(1),clk,s,r,op(2),t(2));
+p4: dff port map(op(2),clk,s,r,op(3),t(3));
+end arch_sipo;</code></pre>
+
+            <h4>PISO (Parallel In Serial Out)</h4>
+            <pre><code>--PISO
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity PISO is
+port(S_L,clk,s,r: in std_logic;
+     din:in std_logic_vector(3 downto 0);
+     op:inout std_logic);
+end PISO;
+
+architecture arch_PISO of PISO is
+component dff
+port(D,clk,s,r:in std_logic;
+     q:inout std_logic);
+end component;
+component andg
+port(a,b:in std_logic;c: out std_logic);
+end component;
+component org
+port(a,b:in std_logic;
+     c:out std_logic);
+end component;
+component notg
+port(a:in std_logic;
+     b: out std_logic);
+end component;
+signal t: std_logic_vector(11 downto 0);
+signal x: std_logic;
+begin
+n1: notg port map(S_L,x);
+p1: dff port map(din(0),clk,s,r,t(0));
+ag1: andg port map(S_L,t(0),t(1));
+ag11: andg port map(x,din(1),t(2));
+o1: org port map(t(1),t(2),t(3));
+p2: dff port map(t(3),clk,s,r,t(4));
+ag2: andg port map(S_L,t(4),t(5));
+ag22: andg port map(x,din(2),t(6));
+o2: org port map(t(5),t(6),t(7));
+p3:dff port map(t(7),clk,s,r,t(8));
+ag3:andg port map(S_L,t(8),t(9));
+ag33:andg port map(x,din(3),t(10));
+o3:org port map(t(9),t(10),t(11));
+p4: dff port map(t(11),clk,s,r,op);
+end arch_piso;</code></pre>
+
+            <h4>PIPO (Parallel In Parallel Out)</h4>
+            <pre><code>--PIPO
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity PIPO is
+port(clk,s,r: in std_logic;
+     din:in std_logic_vector(3 downto 0);
+     op:inout std_logic_vector(3 downto 0));
+end PIPO;
+
+architecture arch_Pipo of PIPO is
+component dff
+port(D,clk,s,r:in std_logic;
+     q,qb:inout std_logic);
+end component;
+signal t:std_logic_vector(3 downto 0);
+begin
+p1: dff port map(din(0),clk,s,r,op(0),t(0));
+p2: dff port map(din(1),clk,s,r,op(1),t(1));
+p3: dff port map(din(2),clk,s,r,op(2),t(2));
+p4: dff port map(din(3),clk,s,r,op(3),t(3));
+end arch_pipo;</code></pre>
         </div>
 
-        <div id="section8" class="section-content">
-            <h3>EEG SIGNAL PROCESSING</h3>
-            
-            <h4>EEG Signal Analysis and Filtering</h4>
-            <pre><code>clc; clear; close all;
-Fs = 256; 
-t = 0:1/Fs:10;
-eeg = 30*sin(2*pi*2*t) + ...   
-      20*sin(2*pi*6*t) + ...   
-      15*sin(2*pi*10*t) + ...  
-      10*sin(2*pi*20*t) + ...  
-      5*randn(size(t));        
-figure;
-plot(t, eeg, 'b');
-xlabel('Time (s)');
-ylabel('Amplitude (µV)');
-title('Raw EEG Signal');
-grid on;
 
-low_cutoff = 0.5;
-high_cutoff = 40;
-[b, a] = butter(4, [low_cutoff high_cutoff]/(Fs/2), 'bandpass');
-eeg_filt = filtfilt(b, a, eeg);
-figure;
-plot(t, eeg_filt, 'r');
-xlabel('Time (s)');
-ylabel('Amplitude (µV)');
-title('Filtered EEG Signal (0.5–40 Hz)');
-grid on;
-
-[pxx, f] = pwelch(eeg_filt, hamming(512), 256, 512, Fs);
-figure;
-plot(f, 10*log10(pxx));
-xlabel('Frequency (Hz)');
-ylabel('Power/Frequency (dB/Hz)');
-title('EEG Power Spectral Density');
-grid on;
-
-delta_band = bandpower(pxx, f, [0.5 4], 'psd');
-theta_band = bandpower(pxx, f, [4 8], 'psd');
-alpha_band = bandpower(pxx, f, [8 13], 'psd');
-beta_band = bandpower(pxx, f, [13 30], 'psd');
-bands = {'Delta', 'Theta', 'Alpha', 'Beta'};
-values = [delta_band, theta_band, alpha_band, beta_band];
-figure;
-bar(values);
-set(gca, 'XTickLabel', bands);
-ylabel('Power (µV^2)');
-title('EEG Band Power Distribution');
-grid on;</code></pre>
-        </div>
-
-        <div id="section9" class="section-content">
-            <h3>ECG SIGNAL PROCESSING</h3>
-            
-            <h4>ECG Signal Analysis and Heart Rate Detection</h4>
-            <pre><code>clear; clc; close all;
-
-fs = 360;
-t = 0:1/fs:5;
-ecg = 1.5*sin(2*pi*1.2*t) + 0.5*sin(2*pi*3*t);
-ecg = ecg + 0.8*randn(size(t));
-
-[b, a] = butter(2, [0.5 40]/(fs/2), 'bandpass');
-ecg_filt = filtfilt(b, a, ecg);
-
-[~, locs_R] = findpeaks(ecg_filt, 'MinPeakHeight', mean(ecg_filt)+0.5*std(ecg_filt), ...
-    'MinPeakDistance', 0.25*fs);
-
-RR_intervals = diff(locs_R)/fs;
-HR = 60 ./ RR_intervals;
-
-figure;
-plot(t, ecg_filt, 'b'); hold on;
-plot(t(locs_R), ecg_filt(locs_R), 'ro', 'MarkerFaceColor', 'r');
-xlabel('Time (s)'); ylabel('Amplitude (mV)');
-title('ECG Signal with R-peaks Detected');
-legend('Filtered ECG', 'R-peaks');
-grid on;
-
-fprintf('Number of heart beats detected: %d\n', length(locs_R));
-
-if ~isempty(HR)
-    fprintf('Average Heart Rate: %.2f bpm\n', mean(HR));
-else
-    fprintf('Not enough peaks to compute HR.\n');
-end
-
-figure;
-plot(HR, 'r-o');
-xlabel('Beat Number'); ylabel('Heart Rate (bpm)');
-title('Heart Rate Variation');
-grid on;</code></pre>
-        </div>
-
-        <div id="section10" class="section-content">
-            <h3>Section 10</h3>
-            <p>This section is currently empty.</p>
-        </div>
     </div>
 
     <script>
         function showSection(sectionNum) {
             // Hide all sections
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= 7; i++) {
                 document.getElementById('section' + i).classList.remove('active');
             }
             
